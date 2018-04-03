@@ -21,7 +21,7 @@ class Presentation(object):
 
         self.meta, text = self.parse_meta(text)
         self.frames, text = self.parse_frame(text)
-        
+
     def __repr__(self):
         REPR = "Fine Presentation: \n"
         for key, val in self.meta.items():
@@ -33,6 +33,9 @@ class Presentation(object):
         m = re.match(PATTERN.META, text)
         if m is not None:
             meta = yaml.load(m.group(2))
+            if 'markdown' in meta:
+                if 'extensions' in meta['markdown']:
+                    self.extensions.extend(meta['markdown']['extensions'])
             text = text[len(m.group(0)):]
         else:
             meta = {}
@@ -56,8 +59,10 @@ class Presentation(object):
                 else:
                     kwargs = yaml.load(meta.group(2))
                     raw_meta = ''.join([meta.group(2), meta.group(3)])
-                    if 'extensions' in kwargs:
-                        self.extensions.extend(kwargs.pop('extensions'))
+                    if 'markdown' in kwargs:
+                        if 'extensions' in kwargs['markdown']:
+                            self.extensions.extend(
+                                kwargs['markdown']['extensions'])
                     frames.append(
                         Frame(
                             content[len(raw_meta):],
