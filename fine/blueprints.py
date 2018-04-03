@@ -57,8 +57,8 @@ def presentation(name):
     with open(filepath, 'r') as f:
         pre = Presentation(f.read(), **md_extensions)
 
-    if 'config' in pre.meta:
-        configs.update(pre.meta['config'])
+    if 'reveal' in pre.meta:
+        configs.update(pre.meta['reveal'])
 
     if 'theme' in pre.meta:
         theme = pre.meta['theme']
