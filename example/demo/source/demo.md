@@ -3,8 +3,13 @@ title: Fine
 # subtitle: Roger's Fine Slide Generator
 description: Roger's Fine Slide Generator
 author: Roger
+
 reveal:
-    transition: 'fade'
+    theme: 'black'
+    # full configuration see:
+    # https://github.com/hakimel/reveal.js#configuration
+    config:
+        transition: 'fade'
 ...
 
 ---
@@ -12,10 +17,6 @@ reveal:
 # **F**{: style='color: #CD5C5C'} **I**{: style='color: orange'} **N**{: style='color: #4169E1'} **E**{: style='color: green'}
 
 ### **Roger**{: style='color: #696969'}'s Slide Generator {: style='color: #A9A9A9'}
-
----
-
-
 
 ---
 

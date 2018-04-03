@@ -58,10 +58,10 @@ def presentation(name):
         pre = Presentation(f.read(), **md_extensions)
 
     if 'reveal' in pre.meta:
-        configs.update(pre.meta['reveal'])
-
-    if 'theme' in pre.meta:
-        theme = pre.meta['theme']
+        if 'config' in pre.meta['reveal']:
+            configs.update(pre.meta['reveal']['config'])
+        if 'theme' in pre.meta['reveal']:
+            theme = pre.meta['reveal']['theme']
 
     theme = (url_for('fine.revealjs', filename='css/theme/') +
              theme + '.css')
