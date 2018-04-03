@@ -1,0 +1,8 @@
+include README.md
+include fine/config.yml
+recursive-include fine/templates *
+recursive-include fine/static *
+graft fine/demo
+graft example
+global-exclude __pycache__
+global-exclude *.py[co]

@@ -1,0 +1,50 @@
+meta:
+  author: No Author
+  title: No Title
+  subtitle: ''
+  description: No description
+
+url: rogerluo.me
+source_dir: source
+public_dir: public
+media_dir: media
+code_dir: code
+
+github: Roger-luo
+
+markdown:
+  extensions:
+    - markdown.extensions.extra
+    # - pymdownx.arithmatex
+    # - pymdownx.magiclink
+
+reveal:
+  theme: black
+  url: 'https://github.com/hakimel/reveal.js/archive/3.5.0.tar.gz'
+  config:
+    controls: false
+    progress: true
+    slideNumber: false
+    history: true
+    keyboard: true
+    overview: true
+    center: true
+    touch: true
+    loop: false
+    rtl: false
+    fragments: true
+    help: true
+    showNotes: false
+    autoSlide: 0
+    autoSlideStoppable: true
+    mouseWheel: false
+    hideAddressBar: true
+    previewlinks: false
+    transition: 'default'
+    transitionSpeed: 'default'
+    backgroundTransition: 'default'
+    viewDistance: 3
+    parallaxBackgroundImage: ''
+    parallaxBackgroundSize: ''
+    parallaxBackgroundHorizontal: ''
+    parallaxBackgroundVertical: ''
