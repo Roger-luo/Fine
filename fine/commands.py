@@ -8,7 +8,7 @@ import tarfile
 import importlib
 from jinja2 import Template
 
-reveal_url_fallback = 'https://github.com/hakimel/reveal.js/archive/3.5.0.tar.gz'
+reveal_url_fallback = 'https://github.com/hakimel/reveal.js/archive/3.6.0.tar.gz'
 slide_template = Template(
     """---
 {%- for key, val in meta.items() %}

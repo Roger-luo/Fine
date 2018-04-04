@@ -20,7 +20,7 @@ markdown:
 
 reveal:
   theme: black
-  url: 'https://github.com/hakimel/reveal.js/archive/3.5.0.tar.gz'
+  url: 'https://github.com/hakimel/reveal.js/archive/3.6.0.tar.gz'
   config:
     controls: false
     progress: true
