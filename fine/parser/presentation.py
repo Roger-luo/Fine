@@ -6,21 +6,19 @@ from .frame import Frame
 
 class PATTERN(object):
 
-    META = re.compile(r'^(-{3,})([\S\s]*?)(\.{3,})')
-    FRAME = re.compile(r'^(-{3,})([\S\s]*?)(-{3,}|$)')
+    SEP = re.compile(r'^(-{3,})$')
+    META = re.compile(r'^(\.{3,})$')
 
 
 class Presentation(object):
     
-    def __init__(self, text, **kwargs):
-        text = text.strip()
+    def __init__(self, **kwargs):
+        self.frames = []
+        self.meta = None
         if 'extensions' in kwargs:
             self.extensions = kwargs.pop('extensions')
         else:
             self.extensions = []
-
-        self.meta, text = self.parse_meta(text)
-        self.frames, text = self.parse_frame(text)
 
     def __repr__(self):
         REPR = "Fine Presentation: \n"
@@ -29,51 +27,59 @@ class Presentation(object):
         REPR += "    frames: %d" % (len(self.frames), )
         return REPR
 
-    def parse_meta(self, text):
-        m = re.match(PATTERN.META, text)
-        if m is not None:
-            meta = yaml.load(m.group(2))
-            if 'markdown' in meta:
-                if 'extensions' in meta['markdown']:
-                    self.extensions.extend(meta['markdown']['extensions'])
-            text = text[len(m.group(0)):]
-        else:
-            meta = {}
-        return meta, text
-
-    def parse_frame(self, text):
-        frames = []
+    def parse(self, text):
+        text = text.strip()
 
         while text:
-            text = text.lstrip()
-            m = re.match(PATTERN.FRAME, text)
-            if m is None:
-                raise ValueError('Frame should be seperated by ---')
+            meta, content, text = self.parse_block(text)
+            meta = yaml.load(meta)
+            self.load_markdown(meta)
+            self.load_frame(meta, content)
+        first = self.frames.pop(0)
+        self.meta = first.configs
 
+    def parse_block(self, text):
+        meta = ''
+        content = ''
+
+        text = text.lstrip()
+        lines = text.splitlines()
+
+        first_line = lines.pop(0)
+        m = re.match(PATTERN.SEP, first_line.rstrip())
+        if m is None:
+            raise ValueError("Missing Frame Seperator around %s" % first_line)
+
+        stack = []
+        while lines:
+            m = re.match(PATTERN.SEP, lines[0].rstrip())
             if m is not None:
-                raw_frame = ''.join([m.group(1), m.group(2)])
-                meta = re.match(PATTERN.META, raw_frame)
-                content = m.group(2)
-                if meta is None:
-                    frames.append(Frame(content, extensions=self.extensions))
-                else:
-                    kwargs = yaml.load(meta.group(2))
-                    raw_meta = ''.join([meta.group(2), meta.group(3)])
-                    if 'markdown' in kwargs:
-                        if 'extensions' in kwargs['markdown']:
-                            self.extensions.extend(
-                                kwargs['markdown']['extensions'])
-                    frames.append(
-                        Frame(
-                            content[len(raw_meta):],
-                            extensions=self.extensions,
-                            **kwargs
-                        )
-                    )
+                break
 
-                if m.group(3) == "":
-                    text = text[len(m.group(0)):]
-                else:
-                    text = text[len(m.group(0))-3:]
+            line = lines.pop(0)
+            m = re.match(PATTERN.META, line.rstrip())
+            if m is not None:
+                meta = '\n'.join(stack)
+                stack.clear()
+            else:
+                stack.append(line)
 
-        return frames, text
+        content = '\n'.join(stack)
+        text = '\n'.join(lines)
+        return meta, content, text
+
+
+    def load_markdown(self, meta):
+        if meta is not None and 'markdown' in meta:
+            if 'extensions' in meta['markdown']:
+                self.extensions.extend(meta['markdown']['extensions'])
+
+    def load_frame(self, meta, content):
+        if meta is None:
+            self.frames.append(
+                Frame(content, extensions=self.extensions)
+            )
+        else:
+            self.frames.append(
+                Frame(content, extensions=self.extensions, **meta)
+            )

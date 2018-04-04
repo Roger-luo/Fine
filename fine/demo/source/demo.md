@@ -211,3 +211,12 @@ Task List
     * [X] item C
 - [ ] item 2
 - [ ] item 3
+
+---
+
+# Table
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell

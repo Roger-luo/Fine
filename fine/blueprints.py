@@ -55,7 +55,8 @@ def presentation(name):
     )
 
     with open(filepath, 'r') as f:
-        pre = Presentation(f.read(), **md_extensions)
+        pre = Presentation(**md_extensions)
+        pre.parse(f.read())
 
     if 'reveal' in pre.meta:
         if 'config' in pre.meta['reveal']:
